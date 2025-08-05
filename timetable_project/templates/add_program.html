@@ -1,0 +1,350 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add New Program</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8797d7 0%, #805a67 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 1rem;
+        }
+
+        .form-container {
+            max-width: 480px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 
+                0 20px 40px rgba(0, 0, 0, 0.1),
+                0 0 0 1px rgba(255, 255, 255, 0.2);
+            padding: 3rem 2.5rem;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .form-container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2, #f093fb);
+        }
+
+        .form-header {
+            text-align: center;
+            margin-bottom: 2.5rem;
+        }
+
+        .form-header h2 {
+            color: #2d3748;
+            font-size: 2rem;
+            font-weight: 700;
+            margin-bottom: 0.5rem;
+            position: relative;
+        }
+
+        .form-header p {
+            color: #718096;
+            font-size: 0.95rem;
+            font-weight: 400;
+        }
+
+        .form-group {
+            margin-bottom: 1.8rem;
+            position: relative;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 0.7rem;
+            font-weight: 600;
+            color: #374151;
+            font-size: 0.9rem;
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+        }
+
+        .form-group label i {
+            color: #667eea;
+            width: 16px;
+        }
+
+        .form-group input {
+            width: 100%;
+            padding: 1rem 1.2rem;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-family: inherit;
+            background: #ffffff;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+        }
+
+        .form-group input:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 
+                0 0 0 3px rgba(102, 126, 234, 0.1),
+                0 4px 12px rgba(102, 126, 234, 0.15);
+            transform: translateY(-1px);
+        }
+
+        .form-group input:valid {
+            border-color: #10b981;
+        }
+
+        .form-group input::placeholder {
+            color: #9ca3af;
+            font-weight: 400;
+        }
+
+        .input-icon {
+            position: absolute;
+            right: 1rem;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #9ca3af;
+            pointer-events: none;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+        }
+
+        .form-group input:focus + .input-icon,
+        .form-group input:valid + .input-icon {
+            opacity: 1;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 1rem 2rem;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            font-size: 1rem;
+            border: none;
+            border-radius: 12px;
+            cursor: pointer;
+            transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+            position: relative;
+            overflow: hidden;
+            margin-top: 1rem;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 
+                0 10px 25px rgba(102, 126, 234, 0.4),
+                0 4px 12px rgba(0, 0, 0, 0.15);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.2), transparent);
+            transition: left 0.5s;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .form-footer {
+            text-align: center;
+            margin-top: 2rem;
+            padding-top: 1.5rem;
+            border-top: 1px solid #e2e8f0;
+        }
+
+        .form-footer p {
+            color: #718096;
+            font-size: 0.85rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .form-container {
+                margin: 1rem;
+                padding: 2rem 1.5rem;
+            }
+            
+            .form-header h2 {
+                font-size: 1.75rem;
+            }
+        }
+
+        /* Animation for form appearance */
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-container {
+            animation: slideUp 0.6s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+
+        /* Loading state for button */
+        .submit-btn.loading {
+            pointer-events: none;
+            opacity: 0.8;
+        }
+
+        .submit-btn.loading::after {
+            content: '';
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            border: 2px solid transparent;
+            border-top: 2px solid white;
+            border-radius: 50%;
+            right: 20px;
+            top: 50%;
+            transform: translateY(-50%);
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: translateY(-50%) rotate(0deg); }
+            100% { transform: translateY(-50%) rotate(360deg); }
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <div class="form-header">
+            <h2>Add New Program</h2>
+            <p>Create a comprehensive academic program profile</p>
+        </div>
+
+        <form method="post" action="/programs/new" id="programForm">
+            <input type="hidden" name="institution_id" value="{{ institution.id }}">
+            <input type="hidden" name="username" value="{{ username }}">
+
+            <div class="form-group">
+                <label for="name">
+                    <i class="fas fa-graduation-cap"></i>
+                    Program Name
+                </label>
+                <input 
+                    type="text" 
+                    id="name" 
+                    name="name" 
+                    placeholder="e.g., Computer Science Engineering"
+                    required
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="duration_years">
+                    <i class="fas fa-clock"></i>
+                    Duration (Years)
+                </label>
+                <input 
+                    type="number" 
+                    id="duration_years" 
+                    name="duration_years" 
+                    placeholder="4"
+                    required 
+                    min="1" 
+                    max="10"
+                >
+            </div>
+
+            <div class="form-group">
+                <label for="specialization_name">
+                    <i class="fas fa-star"></i>
+                    Specialization
+                </label>
+                <input 
+                    type="text" 
+                    id="specialization_name" 
+                    name="specialization_name" 
+                    placeholder="e.g., Artificial Intelligence, Data Science"
+                    required
+                >
+            </div>
+
+            <button type="submit" class="submit-btn" id="submitBtn">
+                <i class="fas fa-plus" style="margin-right: 8px;"></i>
+                Add Program
+            </button>
+        </form>
+
+        <div class="form-footer">
+            <p>All fields are required to create a new program</p>
+        </div>
+    </div>
+
+    <script>
+        // Add smooth interactions
+        document.getElementById('programForm').addEventListener('submit', function(e) {
+            const submitBtn = document.getElementById('submitBtn');
+            submitBtn.classList.add('loading');
+            submitBtn.innerHTML = '<i class="fas fa-spinner fa-spin" style="margin-right: 8px;"></i>Creating Program...';
+        });
+
+        // Add input validation feedback
+        document.querySelectorAll('input[required]').forEach(input => {
+            input.addEventListener('blur', function() {
+                if (this.value.trim()) {
+                    this.classList.add('valid');
+                } else {
+                    this.classList.remove('valid');
+                }
+            });
+        });
+
+        // Add dynamic placeholder updates
+        const nameInput = document.getElementById('name');
+        const specializationInput = document.getElementById('specialization_name');
+        
+        nameInput.addEventListener('focus', function() {
+            this.placeholder = 'Enter the full program name...';
+        });
+        
+        nameInput.addEventListener('blur', function() {
+            this.placeholder = 'e.g., Computer Science Engineering';
+        });
+
+        specializationInput.addEventListener('focus', function() {
+            this.placeholder = 'Enter the specialization area...';
+        });
+        
+        specializationInput.addEventListener('blur', function() {
+            this.placeholder = 'e.g., Artificial Intelligence, Data Science';
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Preference</title>
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #f4f6f8;
+            margin: 0;
+            padding: 0;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            min-height: 100vh;
+        }
+
+        .form-container {
+            background-color: #ffffff;
+            padding: 40px;
+            border-radius: 12px;
+            box-shadow: 0 8px 20px rgba(0, 0, 0, 0.08);
+            width: 100%;
+            max-width: 450px;
+        }
+
+        .form-container h1 {
+            margin-bottom: 25px;
+            font-size: 24px;
+            color: #333333;
+            text-align: center;
+        }
+
+        label {
+            display: block;
+            margin-top: 15px;
+            font-weight: 600;
+            color: #444;
+        }
+
+        input[type="text"], input[type="submit"] {
+            width: 100%;
+            padding: 12px;
+            margin-top: 8px;
+            border: 1px solid #ccc;
+            border-radius: 8px;
+            box-sizing: border-box;
+            font-size: 14px;
+        }
+
+        input[type="submit"] {
+            margin-top: 25px;
+            background-color: #007BFF;
+            color: white;
+            border: none;
+            cursor: pointer;
+            font-weight: bold;
+            transition: background-color 0.3s ease;
+        }
+
+        input[type="submit"]:hover {
+            background-color: #0056b3;
+        }
+
+        .hidden-fields {
+            display: none;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h1>Add Preference</h1>
+        <form method="post" action="/adding_preferences?institution_id={{ institution_id }}&staff_id={{ staff_id }}">
+            <input type="hidden" name="staff_id" value="{{ staff_id }}">
+            <input type="hidden" name="institution_id" value="{{ institution_id }}">
+            <input type="hidden" name="username" value="{{ username }}">
+
+            <label for="preference_type">Preference Type</label>
+            <input type="text" id="preference_type" name="preference_type" required>
+
+            <label for="preference_value">Preference Value</label>
+            <input type="text" id="preference_value" name="preference_value" required>
+
+            <input type="submit" value="Submit Preference">
+        </form>
+    </div>
+</body>
+</html>

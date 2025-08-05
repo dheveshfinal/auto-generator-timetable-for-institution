@@ -1,0 +1,496 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Programs and Specializations</title>
+    <link rel="stylesheet" href="/static/css/style.css">
+</head>
+<style>
+.program_Specializations_table {
+    font-family: 'Inter', 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    line-height: 1.6;
+    color: #2c3e50;
+    background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    min-height: 100vh;
+}
+
+/* Container Styles */
+.page-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 20px;
+    background: rgba(255, 255, 255, 0.95);
+    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+    border-radius: 12px;
+    backdrop-filter: blur(10px);
+    margin-top: 2rem;
+    margin-bottom: 2rem;
+}
+
+/* Header Styles */
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    padding: 2rem 0;
+    background: linear-gradient(135deg, #8797d7 0%, #805a67 100%);
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(102, 126, 234, 0.3);
+}
+
+.institution-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.02em;
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.user-greeting {
+    font-size: 1.2rem;
+    font-weight: 400;
+    opacity: 0.9;
+    letter-spacing: 0.01em;
+}
+
+/* Main Content Styles */
+.main-content {
+    padding: 0 1rem;
+}
+
+.table-wrapper {
+    overflow-x: auto;
+    background: white;
+    border-radius: 12px;
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.08);
+    border: 1px solid #e8ecf0;
+}
+
+/* Table Styles */
+.programs-table {
+    width: 100%;
+    border-collapse: collapse;
+    font-size: 0.95rem;
+    background: white;
+}
+
+/* Table Header Styles */
+.table-header {
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    position: sticky;
+    top: 0;
+    z-index: 10;
+}
+
+.header-row {
+    border-bottom: 2px solid #cbd5e0;
+}
+
+.header-row th {
+    padding: 1.5rem 1.25rem;
+    text-align: left;
+    font-weight: 600;
+    font-size: 0.9rem;
+    color: #4a5568;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    border-right: 1px solid #e2e8f0;
+}
+
+.header-row th:last-child {
+    border-right: none;
+}
+
+.column-program-name {
+    width: 35%;
+    background: linear-gradient(135deg, #edf2f7 0%, #e2e8f0 100%);
+}
+
+.column-duration {
+    width: 20%;
+    text-align: center;
+}
+
+.column-specializations {
+    width: 45%;
+}
+
+/* Table Body Styles */
+.table-body {
+    background: white;
+}
+
+.program-row {
+    border-bottom: 1px solid #e2e8f0;
+    transition: all 0.3s ease;
+}
+
+.program-row:hover {
+    background: linear-gradient(135deg, #f7fafc 0%, #edf2f7 100%);
+    transform: translateY(-1px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.05);
+}
+
+.program-row:last-child {
+    border-bottom: none;
+}
+
+/* Cell Styles */
+.program-row td {
+    padding: 1.5rem 1.25rem;
+    vertical-align: top;
+    border-right: 1px solid #f1f5f9;
+}
+
+.program-row td:last-child {
+    border-right: none;
+}
+
+.cell-program-name {
+    background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+    font-weight: 600;
+}
+
+.program-title {
+    color: #2d3748;
+    font-size: 1.1rem;
+    font-weight: 600;
+    display: block;
+    line-height: 1.4;
+}
+
+.cell-duration {
+    text-align: center;
+    font-weight: 600;
+    color: #4299e1;
+    font-size: 1.1rem;
+}
+
+.duration-value {
+    display: inline-block;
+    background: linear-gradient(135deg, #ebf8ff 0%, #bee3f8 100%);
+    padding: 0.5rem 1rem;
+    border-radius: 20px;
+    color: #2b6cb0;
+    font-weight: 600;
+    box-shadow: 0 2px 4px rgba(66, 153, 225, 0.1);
+}
+
+/* Specializations List Styles */
+.specializations-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.specialization-item {
+    padding: 0.6rem 1rem;
+    margin-bottom: 0.5rem;
+    background: linear-gradient(135deg, #f0fff4 0%, #c6f6d5 100%);
+    border-radius: 8px;
+    border-left: 4px solid #48bb78;
+    color: #2f855a;
+    font-weight: 500;
+    transition: all 0.3s ease;
+    position: relative;
+}
+
+.specialization-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(72, 187, 120, 0.2);
+    background: linear-gradient(135deg, #e6fffa 0%, #b2f5ea 100%);
+}
+
+.specialization-item:last-child {
+    margin-bottom: 0;
+}
+
+.specialization-item::before {
+    content: "●";
+    color: #48bb78;
+    font-size: 0.8rem;
+    position: absolute;
+    left: 0.5rem;
+    top: 50%;
+    transform: translateY(-50%);
+}
+
+.specialization-item {
+    padding-left: 1.5rem;
+}
+
+/* Footer Styles */
+.page-footer {
+    text-align: center;
+    margin-top: 3rem;
+    padding: 2rem 0;
+    background: linear-gradient(135deg, #2d3748 0%, #4a5568 100%);
+    color: white;
+    border-radius: 8px;
+    box-shadow: 0 8px 25px rgba(45, 55, 72, 0.3);
+}
+
+.footer-text {
+    font-size: 0.9rem;
+    opacity: 0.8;
+    font-weight: 400;
+    letter-spacing: 0.05em;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    .page-container {
+        margin: 1rem;
+        padding: 15px;
+    }
+    
+    .institution-title {
+        font-size: 2rem;
+    }
+    
+    .user-greeting {
+        font-size: 1rem;
+    }
+    
+    .programs-table {
+        font-size: 0.85rem;
+    }
+    
+    .header-row th,
+    .program-row td {
+        padding: 1rem 0.75rem;
+    }
+    
+    .column-program-name {
+        width: 100%;
+    }
+    
+    .column-duration,
+    .column-specializations {
+        width: 100%;
+    }
+    
+    .programs-table,
+    .table-header,
+    .table-body,
+    .header-row,
+    .program-row {
+        display: block;
+    }
+    
+    .header-row {
+        display: none;
+    }
+    
+    .program-row {
+        margin-bottom: 1rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 8px;
+        padding: 1rem;
+        background: white;
+    }
+    
+    .program-row td {
+        display: block;
+        padding: 0.5rem 0;
+        border: none;
+        text-align: left;
+    }
+    
+    .program-row td:before {
+        content: attr(data-label) ": ";
+        font-weight: 600;
+        color: #4a5568;
+        display: inline-block;
+        width: 100px;
+    }
+    
+    .cell-duration {
+        text-align: left;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+        color: black;
+    }
+    
+    .page-container {
+        box-shadow: none;
+        background: white;
+    }
+    
+    .page-header,
+    .page-footer {
+        background: white;
+        color: black;
+        box-shadow: none;
+    }
+    
+    .program-row:hover {
+        background: white;
+        transform: none;
+        box-shadow: none;
+    }
+    
+    .specialization-item {
+        background: white;
+        border-left: 2px solid #48bb78;
+    }
+}
+
+/* Accessibility Improvements */
+@media (prefers-reduced-motion: reduce) {
+    * {
+        animation-duration: 0.01ms !important;
+        animation-iteration-count: 1 !important;
+        transition-duration: 0.01ms !important;
+    }
+}
+
+/* Dark Mode Support */
+@media (prefers-color-scheme: dark) {
+    body {
+        background: linear-gradient(135deg, #1a202c 0%, #2d3748 100%);
+        color: #e2e8f0;
+    }
+    
+    .page-container {
+        background: rgba(45, 55, 72, 0.95);
+        border: 1px solid #4a5568;
+    }
+    
+    .table-wrapper {
+        background: #2d3748;
+        border: 1px solid #4a5568;
+    }
+    
+    .programs-table {
+        background: #2d3748;
+    }
+    
+    .table-header {
+        background: linear-gradient(135deg, #4a5568 0%, #718096 100%);
+    }
+    
+    .header-row th {
+        color: #e2e8f0;
+        border-right: 1px solid #4a5568;
+    }
+    
+    .program-row {
+        border-bottom: 1px solid #4a5568;
+    }
+    
+    .program-row:hover {
+        background: linear-gradient(135deg, #4a5568 0%, #718096 100%);
+    }
+    
+    .cell-program-name {
+        background: linear-gradient(135deg, #4a5568 0%, #718096 100%);
+    }
+    
+    .program-title {
+        color: #e2e8f0;
+    }
+}
+.manage-btn {
+    display: inline-block;
+    padding: 8px 16px;
+    background-color: #6366f1;
+    color: white;
+    border-radius: 8px;
+    font-size: 0.9rem;
+    font-weight: 500;
+    text-decoration: none;
+    transition: background-color 0.3s ease;
+}
+
+.manage-btn:hover {
+    background-color: #4f46e5;
+}
+
+
+
+
+</style>
+<body class="program_Specializations_table">
+    <div class="page-container">
+        <!-- Header Section -->
+        <header class="page-header">
+            <h1 class="institution-title">Programs Offered - {{ institution.name }}</h1>
+            <h2 class="user-greeting">Welcome, {{ username }}</h2>
+        </header>
+        <div style="display: flex; justify-content: flex-end; margin-bottom: 1rem;">
+    <a href="/programs/specializations/form?institution_id={{ institution.id }}&username={{ username }}" class="manage-btn">
+        + Add New Program
+    </a>
+</div>
+
+        <!-- Main Content Section -->
+        <main class="main-content">
+            <div class="table-wrapper">
+                <table class="programs-table">
+                    <thead class="table-header">
+    <tr class="header-row">
+        <th class="column-program-name">Program Name</th>
+        <th class="column-duration">Duration (Years)</th>
+        <th class="column-specializations">Specializations</th>
+        <th class="column-actions">Actions</th>
+    </tr>
+</thead>
+<tbody class="table-body">
+    {% for program in programs %}
+    
+    <tr class="program-row">
+        <td class="cell-program-name">
+            <span class="program-title">{{ program.name }}</span>
+        </td>
+        <td class="cell-duration">
+            <span class="duration-value">{{ program.duration_years }}</span>
+        </td>
+        <td class="cell-specializations">
+            <ul class="specializations-list">
+                {% for spec in specializations %}
+                    {% if spec.program_id == program.id %}
+                        <li class="specialization-item">{{ spec.specialization_name }}</li>
+                    {% endif %}
+                {% endfor %}
+            </ul>
+        </td>
+        <td class="cell-actions">
+            <a href="/programs/manage/{{ program.id }}?institution_id={{ institution.id }}&username={{ username }}" class="manage-btn">
+                Manage
+            </a>
+        </td>
+    </tr>
+    {% endfor %}
+</tbody>
+                </table>
+            </div>
+    {% if role_id in [4, 5] %}
+<div style="display: flex; justify-content: space-between; margin-bottom: 1rem;">
+    {% if role_id == 5 %}
+        <a href="/institution_configuration?institution_id={{ institution.id }}&username={{ username }}" class="manage-btn">← Previous</a>
+    {% else %}
+        <div></div>  {# Empty div to maintain spacing on left when only Next is shown #}
+    {% endif %}
+    <a href="/subject_semester?institution_id={{ institution.id }}&username={{ username }}" class="manage-btn">Next →</a>
+</div>
+{% endif %}
+
+
+
+
+        </main>
+
+        <!-- Footer Section -->
+        <footer class="page-footer">
+            <p class="footer-text">Academic Programs Overview</p>
+        </footer>
+    </div>
+</body>
+</html>

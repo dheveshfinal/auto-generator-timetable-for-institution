@@ -1,0 +1,379 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Section-wise Timetable</title>
+    <style>
+        /* Professional & Formal Timetable Styling */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    background: linear-gradient(135deg, #8797d7 0%, #805a67 100%);
+    margin: 0;
+    padding: 40px;
+    color: #212529;
+    line-height: 1.6;
+}
+
+h1, h2 {
+    color: #212529;
+    font-weight: 600;
+}
+
+h1 {
+    font-size: 2.2rem;
+    margin-bottom: 20px;
+    text-align: center;
+    color: #2c3e50;
+}
+
+.header {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 30px;
+    margin-bottom: 30px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+    max-width: 1200px;
+    margin-left: auto;
+    margin-right: auto;
+    margin-bottom: 30px;
+}
+
+.header p {
+    background: #f8f9fa;
+    padding: 20px;
+    border-radius: 6px;
+    margin: 20px 0;
+    border-left: 4px solid #007bff;
+    font-size: 1rem;
+    line-height: 1.6;
+    color: #495057;
+}
+
+.header p strong {
+    color: #212529;
+    font-weight: 600;
+}
+
+.section-container {
+    background: #ffffff;
+    border: 1px solid #dee2e6;
+    border-radius: 8px;
+    padding: 25px;
+    margin: 20px auto;
+    max-width: 1200px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+}
+
+.section-name {
+    font-size: 1.3rem;
+    font-weight: 600;
+    color: #2c3e50;
+    margin-bottom: 20px;
+    padding: 15px 20px;
+    background: #f8f9fa;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    text-align: center;
+    border-left: 4px solid #007bff;
+}
+
+table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 15px;
+    border: 1px solid #dee2e6;
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+th {
+    background: #343a40;
+    color: #ffffff;
+    padding: 12px 10px;
+    font-weight: 600;
+    font-size: 0.9rem;
+    text-align: center;
+    border-bottom: 2px solid #495057;
+}
+
+th:first-child {
+    background: #212529;
+    font-size: 0.95rem;
+    text-align: left;
+    padding-left: 15px;
+}
+
+td {
+    padding: 12px 10px;
+    text-align: center;
+    border-bottom: 1px solid #dee2e6;
+    border-right: 1px solid #dee2e6;
+    font-weight: 500;
+    background: #ffffff;
+}
+
+td:first-child {
+    background: #f8f9fa;
+    font-weight: 600;
+    color: #212529;
+    text-align: left;
+    padding-left: 15px;
+    border-right: 2px solid #dee2e6;
+}
+
+td:last-child {
+    border-right: none;
+}
+
+tbody tr:last-child td {
+    border-bottom: none;
+}
+
+tbody tr:hover {
+    background-color: #f1f3f4;
+}
+
+tbody tr:hover td:first-child {
+    background-color: #e9ecef;
+}
+
+td:not(:first-child):not(:empty) {
+    background: #ffffff;
+    color: #495057;
+    font-weight: 500;
+}
+
+tbody tr:hover td:not(:first-child):not(:empty) {
+    background: #e3f2fd;
+    color: #1565c0;
+}
+
+.export-button {
+    padding: 12px 24px;
+    background: #007bff;
+    color: #ffffff;
+    border: none;
+    border-radius: 6px;
+    font-weight: 600;
+    font-size: 0.95rem;
+    cursor: pointer;
+    display: block;
+    margin: 20px auto 0;
+    transition: background-color 0.2s ease;
+}
+
+.export-button:hover {
+    background: #0056b3;
+}
+
+.export-button:active {
+    background: #004085;
+}
+
+.export-button:focus {
+    outline: 2px solid #80bdff;
+    outline-offset: 2px;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+    body {
+        padding: 20px 15px;
+    }
+    
+    h1 {
+        font-size: 1.8rem;
+    }
+    
+    .header {
+        padding: 20px;
+    }
+    
+    .header p {
+        font-size: 0.9rem;
+        padding: 15px;
+    }
+    
+    .section-container {
+        padding: 20px;
+        margin: 15px auto;
+    }
+    
+    .section-name {
+        font-size: 1.1rem;
+        padding: 12px 15px;
+    }
+    
+    table {
+        font-size: 0.85rem;
+    }
+    
+    th, td {
+        padding: 8px 6px;
+    }
+    
+    th:first-child, td:first-child {
+        padding-left: 10px;
+    }
+    
+    .export-button {
+        padding: 10px 20px;
+        font-size: 0.9rem;
+    }
+}
+
+@media (max-width: 480px) {
+    body {
+        padding: 15px 10px;
+    }
+    
+    table {
+        font-size: 0.75rem;
+    }
+    
+    th, td {
+        padding: 6px 4px;
+    }
+    
+    th:first-child, td:first-child {
+        padding-left: 8px;
+    }
+    
+    .section-name {
+        font-size: 1rem;
+        padding: 10px;
+    }
+}
+
+/* Print Styles */
+@media print {
+    body {
+        background: white;
+        padding: 20px;
+    }
+    
+    .header, .section-container {
+        background: white;
+        box-shadow: none;
+        border: 1px solid #000;
+        page-break-inside: avoid;
+    }
+    
+    .section-name {
+        background: #f0f0f0;
+        color: #000;
+        border: 1px solid #000;
+    }
+    
+    th {
+        background: #f0f0f0;
+        color: #000;
+        border: 1px solid #000;
+    }
+    
+    td {
+        border: 1px solid #000;
+    }
+    
+    .export-button {
+        display: none;
+    }
+    
+    h1 {
+        color: #000;
+    }
+}
+    </style>
+</head>
+<body>
+    <div class="header">
+        <h1>Section-wise Timetable</h1>
+        <p>
+            <strong>Institution:</strong> {{ inst_final_name }} |
+            <strong>Program:</strong> {{ header_info.program_name }} |
+            <strong>Specialization:</strong> {{ header_info.specialization_name }} |
+            <strong>Semester:</strong> {{ header_info.semester_name }}
+        </p>
+        <button class="export-button" onclick="downloadCSV()">Export to CSV</button>
+    </div>
+
+    {% for section, schedule in timetable_schedule.items() %}
+        <div class="section-container">
+            <div class="section-name">
+                Section: {{ section }}
+                {% if section in section_room_map and section_room_map[section] %}
+                    ({{ section_room_map[section] }})
+                {% endif %}
+            </div>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Day / Time</th>
+                        {% for slot in day_time_slot_map[day_time_slot_map|list|first] %}
+                            <th>{{ slot }}</th>
+                        {% endfor %}
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for day, subjects in schedule.items() %}
+                        <tr>
+                            <td>{{ day }}</td>
+                            {% for subject in subjects %}
+                                <td>{{ subject }}</td>
+                            {% endfor %}
+                        </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    {% endfor %}
+    <div name="staff_subjects">
+        <table>
+        <thead>
+            <tr>
+                <th>Faculty</th>
+                <th>Subject</th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for staff, subject in staff_data.items() %}
+                <tr>
+                    <td>{{ staff }}</td>
+                    <td>{{ subject }}</td>
+                </tr>
+            {% endfor %}
+        </tbody>
+    </table>
+
+    </div>
+</body>
+<script>
+function downloadCSV() {
+    let rows = [];
+    document.querySelectorAll("table").forEach(table => {
+        const section = table.previousElementSibling.innerText.trim();
+        rows.push(["", section]);
+        table.querySelectorAll("tr").forEach(tr => {
+            const row = Array.from(tr.querySelectorAll("td, th")).map(td => td.innerText.trim());
+            rows.push(row);
+        });
+        rows.push([]); // empty line between sections
+    });
+
+    let csvContent = rows.map(e => e.join(",")).join("\n");
+    let blob = new Blob([csvContent], { type: 'text/csv;charset=utf-8;' });
+    let link = document.createElement("a");
+    link.href = URL.createObjectURL(blob);
+    link.download = "section_timetable.csv";
+    link.click();
+}
+</script>
+
+</html>

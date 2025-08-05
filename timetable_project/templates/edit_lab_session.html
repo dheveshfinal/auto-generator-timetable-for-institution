@@ -1,0 +1,739 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Edit Lab Session</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #8797d7 0%, #805a67 100%);
+            min-height: 100vh;
+            padding: 20px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .container {
+            max-width: 800px;
+            width: 100%;
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(20px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            border: 1px solid rgba(255, 255, 255, 0.2);
+        }
+
+        .header {
+            text-align: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #f1f5f9;
+        }
+
+        .header h1 {
+            font-size: 2.5rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 15px;
+            margin-bottom: 10px;
+        }
+
+        .header h1 i {
+            color: #667eea;
+            -webkit-text-fill-color: #667eea;
+        }
+
+        .subtitle {
+            color: #64748b;
+            font-size: 1.1rem;
+        }
+
+        .session-info {
+            background: linear-gradient(135deg, rgba(102, 126, 234, 0.1), rgba(118, 75, 162, 0.1));
+            border-radius: 15px;
+            padding: 20px;
+            margin-bottom: 30px;
+            border: 1px solid rgba(102, 126, 234, 0.2);
+        }
+
+        .session-info h3 {
+            color: #334155;
+            font-size: 1.1rem;
+            margin-bottom: 10px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .session-info h3 i {
+            color: #667eea;
+        }
+
+        .current-details {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 15px;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .current-detail {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .current-detail i {
+            color: #667eea;
+            width: 16px;
+        }
+
+        .form {
+            display: grid;
+            gap: 25px;
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 25px;
+        }
+
+        .form-group {
+            display: flex;
+            flex-direction: column;
+            gap: 8px;
+        }
+
+        .form-group.full-width {
+            grid-column: 1 / -1;
+        }
+
+        .form-label {
+            font-weight: 600;
+            color: #334155;
+            font-size: 0.95rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .form-label i {
+            color: #667eea;
+            width: 16px;
+        }
+
+        .form-control {
+            padding: 15px 18px;
+            border: 2px solid #e2e8f0;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            color: #334155;
+            font-family: inherit;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-1px);
+        }
+
+        .form-control:hover {
+            border-color: #cbd5e1;
+        }
+
+        .form-control.modified {
+            border-color: #f59e0b;
+            background: rgba(245, 158, 11, 0.05);
+        }
+
+        select.form-control {
+            cursor: pointer;
+            background-image: url('data:image/svg+xml;charset=US-ASCII,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 4 5"><path fill="%23667eea" d="M2 0L0 2h4zm0 5L0 3h4z"/></svg>');
+            background-repeat: no-repeat;
+            background-position: right 12px center;
+            background-size: 12px;
+            appearance: none;
+            -webkit-appearance: none;
+            -moz-appearance: none;
+        }
+
+        .day-options {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(120px, 1fr));
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .day-option {
+            position: relative;
+        }
+
+        .day-option input[type="radio"] {
+            position: absolute;
+            opacity: 0;
+            width: 0;
+            height: 0;
+        }
+
+        .day-option label {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 12px 16px;
+            border: 2px solid #e2e8f0;
+            border-radius: 10px;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            background: white;
+            font-weight: 600;
+            font-size: 0.9rem;
+            color: #64748b;
+        }
+
+        .day-option input[type="radio"]:checked + label {
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            color: white;
+            border-color: #667eea;
+            transform: translateY(-2px);
+            box-shadow: 0 5px 15px rgba(102, 126, 234, 0.3);
+        }
+
+        .day-option label:hover {
+            border-color: #667eea;
+            transform: translateY(-1px);
+        }
+
+        .time-inputs {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        .time-group {
+            position: relative;
+        }
+
+        .time-group input[type="time"] {
+            padding-left: 45px;
+        }
+
+        .time-icon {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #667eea;
+            pointer-events: none;
+        }
+
+        .form-actions {
+            display: flex;
+            gap: 15px;
+            justify-content: center;
+            margin-top: 30px;
+            padding-top: 30px;
+            border-top: 2px solid #f1f5f9;
+        }
+
+        .btn {
+            padding: 15px 30px;
+            border: none;
+            border-radius: 12px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            min-width: 140px;
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f59e0b, #d97706);
+            color: white;
+            box-shadow: 0 8px 20px rgba(245, 158, 11, 0.3);
+        }
+
+        .btn-primary:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 12px 30px rgba(245, 158, 11, 0.4);
+        }
+
+        .btn-secondary {
+            background: #f8fafc;
+            color: #64748b;
+            border: 2px solid #e2e8f0;
+        }
+
+        .btn-secondary:hover {
+            background: #e2e8f0;
+            color: #334155;
+            transform: translateY(-1px);
+        }
+
+        .btn-danger {
+            background: rgba(239, 68, 68, 0.1);
+            color: #dc2626;
+            border: 2px solid rgba(239, 68, 68, 0.2);
+        }
+
+        .btn-danger:hover {
+            background: #dc2626;
+            color: white;
+            transform: translateY(-1px);
+        }
+
+        .form-card {
+            background: #f8fafc;
+            border-radius: 15px;
+            padding: 25px;
+            border: 1px solid #e2e8f0;
+        }
+
+        .card-title {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: #334155;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .card-title i {
+            color: #667eea;
+        }
+
+        .changes-indicator {
+            position: fixed;
+            top: 20px;
+            right: 20px;
+            background: #f59e0b;
+            color: white;
+            padding: 10px 20px;
+            border-radius: 25px;
+            font-weight: 600;
+            transform: translateX(300px);
+            transition: all 0.3s ease;
+            box-shadow: 0 5px 15px rgba(245, 158, 11, 0.3);
+        }
+
+        .changes-indicator.show {
+            transform: translateX(0);
+        }
+
+        /* Loading states */
+        .btn-primary:disabled {
+            opacity: 0.7;
+            cursor: not-allowed;
+            transform: none;
+        }
+
+        .btn-primary:disabled:hover {
+            transform: none;
+        }
+
+        /* Responsive design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 10px;
+            }
+
+            .header h1 {
+                font-size: 2rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 20px;
+            }
+
+            .time-inputs {
+                grid-template-columns: 1fr;
+            }
+
+            .day-options {
+                grid-template-columns: 1fr 1fr;
+            }
+
+            .form-actions {
+                flex-direction: column;
+            }
+
+            .current-details {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Animation for form elements */
+        .form-group {
+            opacity: 0;
+            transform: translateY(20px);
+            animation: slideIn 0.6s ease forwards;
+        }
+
+        .form-group:nth-child(1) { animation-delay: 0.1s; }
+        .form-group:nth-child(2) { animation-delay: 0.2s; }
+        .form-group:nth-child(3) { animation-delay: 0.3s; }
+        .form-group:nth-child(4) { animation-delay: 0.4s; }
+        .form-group:nth-child(5) { animation-delay: 0.5s; }
+
+        @keyframes slideIn {
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        /* Success animation */
+        @keyframes success {
+            0% { transform: scale(1); }
+            50% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
+
+        .success-animation {
+            animation: success 0.3s ease;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-edit"></i>
+                Edit Lab Session
+            </h1>
+            <p class="subtitle">Modify the laboratory session details below</p>
+        </div>
+
+        <div class="session-info">
+            <h3>
+                <i class="fas fa-info-circle"></i>
+                Current Session Details
+            </h3>
+            <div class="current-details">
+                <div class="current-detail">
+                    <i class="fas fa-book-open"></i>
+                    <span>Subject: <strong>{{ session.subject_name | default('N/A') }}</strong></span>
+                </div>
+                <div class="current-detail">
+                    <i class="fas fa-user-tie"></i>
+                    <span>Staff: <strong>{{ session.staff_name | default('N/A') }}</strong></span>
+                </div>
+                <div class="current-detail">
+                    <i class="fas fa-door-open"></i>
+                    <span>Room: <strong>{{ session.room_name | default('N/A') }}</strong></span>
+                </div>
+                <div class="current-detail">
+                    <i class="fas fa-calendar-day"></i>
+                    <span>Day: <strong>{{ session.day }}</strong></span>
+                </div>
+                <div class="current-detail">
+                    <i class="fas fa-clock"></i>
+                    <span>Time: <strong>{{ session.start_time }} - {{ session.end_time }}</strong></span>
+                </div>
+            </div>
+        </div>
+
+        <div class="changes-indicator" id="changesIndicator">
+            <i class="fas fa-exclamation-triangle"></i>
+            Unsaved Changes
+        </div>
+
+        <form method="post" action="/lab_session/edit/{{ session.id }}" class="form" id="editSessionForm">
+            <input type="hidden" name="institution" value="{{ institution_id }}">
+            <input type="hidden" name="username" value="{{ username }}">
+
+            <div class="form-card">
+                <div class="card-title">
+                    <i class="fas fa-info-circle"></i>
+                    Basic Information
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label class="form-label" for="subject_id">
+                            <i class="fas fa-book-open"></i>
+                            Subject
+                        </label>
+                        <select name="subject_id" id="subject_id" class="form-control" required data-original="{{ session.subject_id }}">
+                            {% for subject in subjects %}
+                                <option value="{{ subject.id }}" {% if subject.id == session.subject_id %}selected{% endif %}>
+                                    {{ subject.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="staff_id">
+                            <i class="fas fa-user-tie"></i>
+                            Staff Member
+                        </label>
+                        <select name="staff_id" id="staff_id" class="form-control" required data-original="{{ session.staff_id }}">
+                            {% for s in staff %}
+                                <option value="{{ s.id }}" {% if s.id == session.staff_id %}selected{% endif %}>
+                                    {{ s.name }}
+                                </option>
+                            {% endfor %}
+                        </select>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label" for="room_id">
+                        <i class="fas fa-door-open"></i>
+                        Laboratory Room
+                    </label>
+                    <select name="room_id" id="room_id" class="form-control" required data-original="{{ session.room_id }}">
+                        {% for r in rooms %}
+                            <option value="{{ r.id }}" {% if r.id == session.room_id %}selected{% endif %}>
+                                {{ r.name }}
+                            </option>
+                        {% endfor %}
+                    </select>
+                </div>
+            </div>
+
+            <div class="form-card">
+                <div class="card-title">
+                    <i class="fas fa-calendar-alt"></i>
+                    Schedule Details
+                </div>
+
+                <div class="form-group">
+                    <label class="form-label">
+                        <i class="fas fa-calendar-day"></i>
+                        Day of the Week
+                    </label>
+                    <div class="day-options">
+                        <div class="day-option">
+                            <input type="radio" id="monday" name="day" value="Monday" {% if session.day == 'Monday' %}checked{% endif %} required data-original="{{ session.day }}">
+                            <label for="monday">Monday</label>
+                        </div>
+                        <div class="day-option">
+                            <input type="radio" id="tuesday" name="day" value="Tuesday" {% if session.day == 'Tuesday' %}checked{% endif %} required data-original="{{ session.day }}">
+                            <label for="tuesday">Tuesday</label>
+                        </div>
+                        <div class="day-option">
+                            <input type="radio" id="wednesday" name="day" value="Wednesday" {% if session.day == 'Wednesday' %}checked{% endif %} required data-original="{{ session.day }}">
+                            <label for="wednesday">Wednesday</label>
+                        </div>
+                        <div class="day-option">
+                            <input type="radio" id="thursday" name="day" value="Thursday" {% if session.day == 'Thursday' %}checked{% endif %} required data-original="{{ session.day }}">
+                            <label for="thursday">Thursday</label>
+                        </div>
+                        <div class="day-option">
+                            <input type="radio" id="friday" name="day" value="Friday" {% if session.day == 'Friday' %}checked{% endif %} required data-original="{{ session.day }}">
+                            <label for="friday">Friday</label>
+                        </div>
+                        <div class="day-option">
+                            <input type="radio" id="saturday" name="day" value="Saturday" {% if session.day == 'Saturday' %}checked{% endif %} required data-original="{{ session.day }}">
+                            <label for="saturday">Saturday</label>
+                        </div>
+                        <div class="day-option">
+                            <input type="radio" id="sunday" name="day" value="Sunday" {% if session.day == 'Sunday' %}checked{% endif %} required data-original="{{ session.day }}">
+                            <label for="sunday">Sunday</label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="time-inputs">
+                    <div class="form-group">
+                        <label class="form-label" for="start_time">
+                            <i class="fas fa-play-circle"></i>
+                            Start Time
+                        </label>
+                        <div class="time-group">
+                            <i class="fas fa-clock time-icon"></i>
+                            <input type="time" name="start_time" id="start_time" class="form-control" value="{{ session.start_time }}" required data-original="{{ session.start_time }}">
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="end_time">
+                            <i class="fas fa-stop-circle"></i>
+                            End Time
+                        </label>
+                        <div class="time-group">
+                            <i class="fas fa-clock time-icon"></i>
+                            <input type="time" name="end_time" id="end_time" class="form-control" value="{{ session.end_time }}" required data-original="{{ session.end_time }}">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary" id="updateBtn">
+                    <i class="fas fa-save"></i>
+                    Update Session
+                </button>
+                <a href="/lab_session?institution={{ institution_id }}&username={{ username }}" class="btn btn-secondary">
+                    <i class="fas fa-arrow-left"></i>
+                    Back to Sessions
+                </a>
+                <a href="/lab_session/delete/{{ session.id }}?institution={{ institution_id }}&username={{ username }}" 
+                   class="btn btn-danger"
+                   onclick="return confirm('⚠️ Are you sure you want to delete this lab session? This action cannot be undone.')">
+                    <i class="fas fa-trash-alt"></i>
+                    Delete Session
+                </a>
+            </div>
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('editSessionForm');
+            const updateBtn = document.getElementById('updateBtn');
+            const changesIndicator = document.getElementById('changesIndicator');
+            const startTimeInput = document.getElementById('start_time');
+            const endTimeInput = document.getElementById('end_time');
+            
+            let hasChanges = false;
+            const originalValues = {};
+
+            // Store original values
+            const formElements = form.querySelectorAll('[data-original]');
+            formElements.forEach(element => {
+                originalValues[element.name] = element.dataset.original;
+            });
+
+            // Check for changes
+            function checkForChanges() {
+                hasChanges = false;
+                
+                formElements.forEach(element => {
+                    let currentValue;
+                    if (element.type === 'radio') {
+                        currentValue = form.querySelector(`input[name="${element.name}"]:checked`)?.value || '';
+                    } else {
+                        currentValue = element.value;
+                    }
+                    
+                    if (currentValue !== originalValues[element.name]) {
+                        hasChanges = true;
+                        element.classList.add('modified');
+                    } else {
+                        element.classList.remove('modified');
+                    }
+                });
+
+                // Show/hide changes indicator
+                if (hasChanges) {
+                    changesIndicator.classList.add('show');
+                    updateBtn.style.background = 'linear-gradient(135deg, #f59e0b, #d97706)';
+                } else {
+                    changesIndicator.classList.remove('show');
+                    updateBtn.style.background = '';
+                }
+            }
+
+            // Form validation
+            function validateTimes() {
+                const startTime = startTimeInput.value;
+                const endTime = endTimeInput.value;
+                
+                if (startTime && endTime) {
+                    const start = new Date(`2000-01-01T${startTime}`);
+                    const end = new Date(`2000-01-01T${endTime}`);
+                    
+                    if (end <= start) {
+                        endTimeInput.setCustomValidity('End time must be after start time');
+                        return false;
+                    } else {
+                        endTimeInput.setCustomValidity('');
+                        return true;
+                    }
+                }
+                return true;
+            }
+
+            // Event listeners for change detection
+            formElements.forEach(element => {
+                element.addEventListener('change', checkForChanges);
+                element.addEventListener('input', checkForChanges);
+                
+                if (element.type === 'radio') {
+                    element.addEventListener('change', checkForChanges);
+                }
+            });
+
+            startTimeInput.addEventListener('change', validateTimes);
+            endTimeInput.addEventListener('change', validateTimes);
+
+            // Form submission with loading state
+            form.addEventListener('submit', function(e) {
+                if (!validateTimes()) {
+                    e.preventDefault();
+                    return;
+                }
+
+                if (!hasChanges) {
+                    e.preventDefault();
+                    alert('No changes detected. Please modify some fields before updating.');
+                    return;
+                }
+
+                // Show loading state
+                updateBtn.disabled = true;
+                updateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Updating Session...';
+                
+                // Add success animation to form
+                setTimeout(() => {
+                    form.classList.add('success-animation');
+                }, 100);
+            });
+
+            // Prevent navigation away with unsaved changes
+            window.addEventListener('beforeunload', function(e) {
+                if (hasChanges) {
+                    e.preventDefault();
+                    e.returnValue = 'You have unsaved changes. Are you sure you want to leave?';
+                    return e.returnValue;
+                }
+            });
+
+            // Enhanced select interactions
+            const selects = document.querySelectorAll('select.form-control');
+            selects.forEach(select => {
+                select.addEventListener('change', function() {
+                    if (this.value) {
+                        this.style.color = '#334155';
+                    } else {
+                        this.style.color = '#9ca3af';
+                    }
+                });
+            });
+
+            // Initialize change detection
+            checkForChanges();
+        });
+    </script>
+</body>
+</html>

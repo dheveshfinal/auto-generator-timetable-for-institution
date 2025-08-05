@@ -1,0 +1,422 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Add Section and Room</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8797d7 0%, #805a67 100%);
+            min-height: 100vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+        }
+
+        .container {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            box-shadow: 0 20px 40px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            width: 100%;
+            max-width: 600px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .container::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            height: 4px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 20px 20px 0 0;
+        }
+
+        h2 {
+            color: #2c3e50;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+            font-weight: 600;
+            position: relative;
+        }
+
+        h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: linear-gradient(90deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .success-message {
+            background: linear-gradient(135deg, #00b894, #00a085);
+            color: white;
+            padding: 15px 20px;
+            border-radius: 12px;
+            margin-bottom: 25px;
+            text-align: center;
+            font-weight: 500;
+            box-shadow: 0 5px 15px rgba(0, 184, 148, 0.3);
+            animation: slideIn 0.5s ease-out;
+        }
+
+        @keyframes slideIn {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .form-section {
+            margin-bottom: 35px;
+        }
+
+        .section-title {
+            color: #34495e;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid #ecf0f1;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .section-title::before {
+            content: '';
+            width: 4px;
+            height: 20px;
+            background: linear-gradient(135deg, #667eea, #764ba2);
+            border-radius: 2px;
+        }
+
+        .form-group {
+            margin-bottom: 25px;
+            position: relative;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 8px;
+            color: #2c3e50;
+            font-weight: 500;
+            font-size: 0.95rem;
+        }
+
+        input[type="text"],
+        input[type="number"],
+        select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #ecf0f1;
+            border-radius: 12px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: white;
+            color: #2c3e50;
+        }
+
+        input[type="text"]:focus,
+        input[type="number"]:focus,
+        select:focus {
+            outline: none;
+            border-color: #667eea;
+            box-shadow: 0 0 0 3px rgba(102, 126, 234, 0.1);
+            transform: translateY(-2px);
+        }
+
+        input[type="text"]:hover,
+        input[type="number"]:hover,
+        select:hover {
+            border-color: #bdc3c7;
+        }
+
+        select {
+            cursor: pointer;
+            background-image: url("data:image/svg+xml;charset=UTF-8,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24' fill='none' stroke='%23667eea' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3e%3cpolyline points='6,9 12,15 18,9'%3e%3c/polyline%3e%3c/svg%3e");
+            background-repeat: no-repeat;
+            background-position: right 15px center;
+            background-size: 16px;
+            padding-right: 45px;
+            appearance: none;
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-size: 1.1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            margin-top: 20px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .submit-btn::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: -100%;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(255, 255, 255, 0.3), transparent);
+            transition: left 0.5s ease;
+        }
+
+        .submit-btn:hover::before {
+            left: 100%;
+        }
+
+        .submit-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 10px 25px rgba(102, 126, 234, 0.4);
+        }
+
+        .submit-btn:active {
+            transform: translateY(0);
+        }
+
+        .form-row {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 25px;
+                margin: 10px;
+            }
+
+            h2 {
+                font-size: 1.6rem;
+            }
+
+            .form-row {
+                grid-template-columns: 1fr;
+                gap: 15px;
+            }
+
+            .section-title {
+                font-size: 1.1rem;
+            }
+
+            input[type="text"],
+            input[type="number"],
+            select {
+                padding: 12px 16px;
+            }
+
+            .submit-btn {
+                padding: 16px;
+                font-size: 1rem;
+            }
+        }
+
+        .required::after {
+            content: ' *';
+            color: #e74c3c;
+            font-weight: bold;
+        }
+
+        .input-icon {
+            position: relative;
+        }
+
+        .input-icon::before {
+            position: absolute;
+            left: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            color: #95a5a6;
+            font-size: 1.1rem;
+            z-index: 1;
+        }
+
+        .input-icon input {
+            padding-left: 45px;
+        }
+
+        .capacity-input::before {
+            content: '👥';
+        }
+
+        .location-input::before {
+            content: '📍';
+        }
+
+        .room-name-input::before {
+            content: '🏢';
+        }
+
+        .section-name-input::before {
+            content: '📚';
+        }
+
+        .semester-input::before {
+            content: '📅';
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h2>Add Section and Room</h2>
+        
+        <!-- Success Message (conditional) -->
+        <!-- {% if message %} -->
+        <div class="success-message">
+            <!-- {{ message }} -->
+            Section and room added successfully!
+        </div>
+        <!-- {% endif %} -->
+
+        <form method="post" action="/add_section_room?institution_id={{ institution_id }}&username={{ username }}">
+            <!-- Section Details -->
+            <div class="form-section">
+                <h3 class="section-title">Section Information</h3>
+                
+                <div class="form-group">
+                    <label for="section_name" class="required">Section Name</label>
+                    <div class="input-icon section-name-input">
+                        <input type="text" id="section_name" name="section_name" placeholder="Enter section name" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="specializations" class="required">Specialization</label>
+                        <select id="specializations" name="specializations" required>
+    <option value="">-- Select Specialization --</option>
+    {% for spec in specializations %}
+        <option style="color: #000;" value="{{ spec['id'] }}">{{ spec['specialization_name'] }}</option>
+
+    {% endfor %}
+</select>
+
+
+                    </div>
+
+                    <div class="form-group">
+                        <label for="sem" class="required">Semester</label>
+                        <div class="input-icon semester-input">
+                            <input type="number" id="sem" name="sem" placeholder="e.g., 1" min="1" max="8" required>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Room Details -->
+            <div class="form-section">
+                <h3 class="section-title">Room Information</h3>
+                
+                <div class="form-group">
+                    <label for="Room_name" class="required">Room Name</label>
+                    <div class="input-icon room-name-input">
+                        <input type="text" id="Room_name" name="Room_name" placeholder="Enter room name" required>
+                    </div>
+                </div>
+
+                <div class="form-row">
+                    <div class="form-group">
+                        <label for="Room_type" class="required">Room Type</label>
+                        <select id="Room_type" name="Room_type" required>
+                            <option value="">-- Select Room Type --</option>
+                            <option value="Classroom">🏫 Classroom</option>
+                            <option value="Lab">🧪 Lab</option>
+                            <option value="Auditorium">🎭 Auditorium</option>
+                            <option value="Workshop">🔧 Workshop</option>
+                            <option value="Computer Lab">💻 Computer Lab</option>
+                            <option value="Seminar Hall">🎓 Seminar Hall</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="Capacity" class="required">Capacity</label>
+                        <div class="input-icon capacity-input">
+                            <input type="number" id="Capacity" name="Capacity" placeholder="Enter capacity" min="1" required>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label for="Location" class="required">Location</label>
+                    <div class="input-icon location-input">
+                        <input type="text" id="Location" name="Location" placeholder="Enter location details" required>
+                    </div>
+                </div>
+            </div>
+
+            <button type="submit" class="submit-btn">
+                Submit Information
+            </button>
+        </form>
+    </div>
+
+    <script>
+        // Add smooth animations and interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            const inputs = document.querySelectorAll('input, select');
+            
+            inputs.forEach(input => {
+                input.addEventListener('focus', function() {
+                    this.parentElement.style.transform = 'scale(1.02)';
+                });
+                
+                input.addEventListener('blur', function() {
+                    this.parentElement.style.transform = 'scale(1)';
+                });
+            });
+
+            // Form validation feedback
+            const form = document.querySelector('form');
+            const submitBtn = document.querySelector('.submit-btn');
+            
+            form.addEventListener('submit', function(e) {
+                submitBtn.innerHTML = 'Processing...';
+                submitBtn.style.background = 'linear-gradient(135deg, #95a5a6, #7f8c8d)';
+            });
+
+            // Auto-hide success message after 5 seconds
+            const successMessage = document.querySelector('.success-message');
+            if (successMessage) {
+                setTimeout(() => {
+                    successMessage.style.opacity = '0';
+                    successMessage.style.transform = 'translateY(-20px)';
+                    setTimeout(() => {
+                        successMessage.style.display = 'none';
+                    }, 500);
+                }, 5000);
+            }
+        });
+    </script>
+</body>
+</html>

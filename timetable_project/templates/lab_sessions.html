@@ -1,0 +1,677 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lab Sessions Management</title>
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8797d7 0%, #805a67 100%);
+            color: #212529;
+            line-height: 1.6;
+            min-height: 100vh;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            background: #ffffff;
+            border-radius: 12px;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+            padding: 40px;
+            border: 1px solid #dee2e6;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding-bottom: 20px;
+            border-bottom: 2px solid #e9ecef;
+        }
+
+        .header h1 {
+            font-size: 2.2rem;
+            font-weight: 600;
+            color: #2c3e50;
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .header h1 i {
+            color: #007bff;
+            font-size: 2rem;
+        }
+
+        .add-btn {
+            background: #007bff;
+            color: white;
+            border: none;
+            padding: 12px 24px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(0, 123, 255, 0.3);
+        }
+
+        .add-btn:hover {
+            background: #0056b3;
+            transform: translateY(-1px);
+            box-shadow: 0 4px 12px rgba(0, 123, 255, 0.4);
+        }
+
+        .table-container {
+            background: white;
+            border-radius: 12px;
+            box-shadow: 0 2px 8px rgba(0, 0, 0, 0.08);
+            overflow: hidden;
+            border: 1px solid #dee2e6;
+            margin-bottom: 30px;
+        }
+
+        .table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        .table thead {
+            background: #f8f9fa;
+        }
+
+        .table th {
+            padding: 16px 12px;
+            text-align: left;
+            font-weight: 600;
+            color: #495057;
+            border-bottom: 2px solid #dee2e6;
+            font-size: 0.9rem;
+        }
+
+        .table th i {
+            color: #6c757d;
+            margin-right: 8px;
+        }
+
+        .table td {
+            padding: 14px 12px;
+            border-bottom: 1px solid #f1f3f4;
+            color: #495057;
+            vertical-align: middle;
+        }
+
+        .table tbody tr {
+            transition: all 0.2s ease;
+        }
+
+        .table tbody tr:hover {
+            background-color: #f8f9fa;
+        }
+
+        .subject-badge {
+            background: #007bff;
+            color: white;
+            padding: 6px 12px;
+            border-radius: 20px;
+            font-weight: 600;
+            font-size: 0.85rem;
+            display: inline-block;
+        }
+
+        .staff-info {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .staff-avatar {
+            width: 36px;
+            height: 36px;
+            border-radius: 50%;
+            background: #6c757d;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: bold;
+            font-size: 0.9rem;
+        }
+
+        .room-badge {
+            background: #f8f9fa;
+            color: #495057;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-weight: 600;
+            border: 1px solid #dee2e6;
+        }
+
+        .day-badge {
+            background: #e3f2fd;
+            color: #1976d2;
+            padding: 6px 12px;
+            border-radius: 16px;
+            font-weight: 600;
+            text-transform: uppercase;
+            font-size: 0.8rem;
+            border: 1px solid #bbdefb;
+        }
+
+        .time-slot {
+            display: flex;
+            flex-direction: column;
+            gap: 2px;
+        }
+
+        .time {
+            font-weight: 600;
+            color: #212529;
+        }
+
+        .time-label {
+            font-size: 0.75rem;
+            color: #6c757d;
+            text-transform: uppercase;
+        }
+
+        .actions {
+            display: flex;
+            gap: 8px;
+        }
+
+        .action-btn {
+            padding: 6px 12px;
+            border-radius: 6px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.8rem;
+            transition: all 0.2s ease;
+            display: inline-flex;
+            align-items: center;
+            gap: 4px;
+            border: 1px solid;
+        }
+
+        .edit-btn {
+            background: #fff3cd;
+            color: #856404;
+            border-color: #ffeaa7;
+        }
+
+        .edit-btn:hover {
+            background: #ffc107;
+            color: white;
+            border-color: #ffc107;
+        }
+
+        .delete-btn {
+            background: #f8d7da;
+            color: #721c24;
+            border-color: #f5c6cb;
+        }
+
+        .delete-btn:hover {
+            background: #dc3545;
+            color: white;
+            border-color: #dc3545;
+        }
+
+        .empty-state {
+            text-align: center;
+            padding: 60px 20px;
+            color: #6c757d;
+        }
+
+        .empty-state i {
+            font-size: 3rem;
+            color: #dee2e6;
+            margin-bottom: 20px;
+        }
+
+        .empty-state h3 {
+            font-size: 1.3rem;
+            margin-bottom: 10px;
+            color: #495057;
+        }
+
+        /* Action Buttons Section */
+        .action-section {
+            background: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 12px;
+            padding: 25px;
+            margin-top: 30px;
+        }
+
+        .action-section h3 {
+            color: #2c3e50;
+            font-size: 1.3rem;
+            font-weight: 600;
+            margin-bottom: 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .action-section h3 i {
+            color: #007bff;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 15px;
+            flex-wrap: wrap;
+        }
+
+        .primary-action-btn {
+            background: #28a745;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(40, 167, 69, 0.3);
+        }
+
+        .primary-action-btn:hover {
+            background: #218838;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(40, 167, 69, 0.4);
+        }
+
+        .secondary-action-btn {
+            background: #6c757d;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(108, 117, 125, 0.3);
+        }
+
+        .secondary-action-btn:hover {
+            background: #5a6268;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(108, 117, 125, 0.4);
+        }
+
+        .info-action-btn {
+            background: #17a2b8;
+            color: white;
+            border: none;
+            padding: 14px 28px;
+            border-radius: 8px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            text-decoration: none;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+            box-shadow: 0 2px 8px rgba(23, 162, 184, 0.3);
+        }
+
+        .info-action-btn:hover {
+            background: #138496;
+            transform: translateY(-2px);
+            box-shadow: 0 4px 15px rgba(23, 162, 184, 0.4);
+        }
+
+        .action-description {
+            color: #6c757d;
+            font-size: 0.9rem;
+            margin-top: 15px;
+            padding: 15px;
+            background: white;
+            border-radius: 8px;
+            border: 1px solid #e9ecef;
+        }
+
+        @media (max-width: 768px) {
+            .container {
+                padding: 20px;
+                margin: 10px;
+            }
+
+            .header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+
+            .header h1 {
+                font-size: 1.8rem;
+            }
+
+            .table-container {
+                overflow-x: auto;
+            }
+
+            .table {
+                min-width: 800px;
+            }
+
+            .actions {
+                flex-direction: column;
+                gap: 5px;
+            }
+
+            .action-buttons {
+                flex-direction: column;
+            }
+
+            .primary-action-btn,
+            .secondary-action-btn,
+            .info-action-btn {
+                justify-content: center;
+                width: 100%;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .header h1 {
+                font-size: 1.6rem;
+            }
+
+            .action-section {
+                padding: 20px;
+            }
+        }
+
+        /* Loading states */
+        .loading {
+            opacity: 0.7;
+            pointer-events: none;
+        }
+
+        .loading .primary-action-btn,
+        .loading .secondary-action-btn,
+        .loading .info-action-btn {
+            background: #6c757d;
+            cursor: not-allowed;
+        }
+
+        /* Print styles */
+        @media print {
+            body {
+                background: white;
+            }
+
+            .container {
+                box-shadow: none;
+                border: 1px solid #000;
+            }
+
+            .action-section {
+                display: none;
+            }
+
+            .add-btn {
+                display: none;
+            }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <div class="header">
+            <h1>
+                <i class="fas fa-flask"></i>
+                Lab Sessions Management
+            </h1>
+            <a href="/lab_session/add?institution={{ institution_id }}&username={{ username }}" class="add-btn">
+                <i class="fas fa-plus"></i>
+                Add New Session
+            </a>
+        </div>
+
+        <div class="table-container">
+            {% if lab_sessions %}
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th><i class="fas fa-book-open"></i> Subject</th>
+                        <th><i class="fas fa-user-tie"></i> Staff</th>
+                        <th><i class="fas fa-door-open"></i> Room</th>
+                        <th><i class="fas fa-calendar-day"></i> Day</th>
+                        <th><i class="fas fa-clock"></i> Start Time</th>
+                        <th><i class="fas fa-clock"></i> End Time</th>
+                        <th><i class="fas fa-cogs"></i> Actions</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for session in lab_sessions %}
+                    <tr>
+                        <td>
+                            <span class="subject-badge">{{ session.subject_name }}</span>
+                        </td>
+                        <td>
+                            <div class="staff-info">
+                                <div class="staff-avatar">
+                                    {{ session.staff_name.0|upper }}
+                                </div>
+                                <span>{{ session.staff_name }}</span>
+                            </div>
+                        </td>
+                        <td>
+                            <span class="room-badge">{{ session.room_name }}</span>
+                        </td>
+                        <td>
+                            <span class="day-badge">{{ session.day }}</span>
+                        </td>
+                        <td>
+                            <div class="time-slot">
+                                <span class="time">{{ session.start_time }}</span>
+                                <span class="time-label">Start</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="time-slot">
+                                <span class="time">{{ session.end_time }}</span>
+                                <span class="time-label">End</span>
+                            </div>
+                        </td>
+                        <td>
+                            <div class="actions">
+                                <a href="/lab_session/edit/{{ session.id }}?institution={{ institution_id }}&username={{ username }}" 
+                                   class="action-btn edit-btn">
+                                    <i class="fas fa-edit"></i>
+                                    Edit
+                                </a>
+                                <a href="/lab_session/delete/{{ session.id }}?institution={{ institution_id }}&username={{ username }}" 
+                                   class="action-btn delete-btn"
+                                   onclick="return confirm('⚠️ Are you sure you want to delete this lab session? This action cannot be undone.')">
+                                    <i class="fas fa-trash-alt"></i>
+                                    Delete
+                                </a>
+                            </div>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <div class="empty-state">
+                <i class="fas fa-flask"></i>
+                <h3>No Lab Sessions Found</h3>
+                <p>Get started by creating your first lab session.</p>
+            </div>
+            {% endif %}
+        </div>
+
+        <!-- Professional Action Section -->
+        <div class="action-section">
+            <h3>
+                <i class="fas fa-tasks"></i>
+                Quick Actions
+            </h3>
+            
+            <div class="action-buttons">
+                <form method="post" action="/generate-timetable" style="display: inline;">
+                    <input type="hidden" name="institution_id" value="{{ institution_id }}">
+                    <button type="submit" class="primary-action-btn" id="generateBtn">
+                        <i class="fas fa-calendar-alt"></i>
+                        Generate Timetable
+                    </button>
+                </form>
+
+                <a href="/get-related-semesters?institution_id={{ institution_id }}" class="info-action-btn">
+                    <i class="fas fa-graduation-cap"></i>
+                    View Related Semesters
+                </a>
+
+                <button class="secondary-action-btn" onclick="window.print()">
+                    <i class="fas fa-print"></i>
+                    Print Report
+                </button>
+            </div>
+
+            <div class="action-description">
+                <strong>Quick Actions Guide:</strong><br>
+                • <strong>Generate Timetable:</strong> Create a comprehensive timetable based on all configured data<br>
+                • <strong>View Related Semesters:</strong> Browse and manage semester-specific information<br>
+                • <strong>Print Report:</strong> Generate a printable version of the lab sessions report
+            </div>
+        </div>
+    </div>
+
+    <script>
+        // Enhanced user interactions
+        document.addEventListener('DOMContentLoaded', function() {
+            // Add smooth loading animation for table rows
+            const tableRows = document.querySelectorAll('.table tbody tr');
+            tableRows.forEach((row, index) => {
+                row.style.opacity = '0';
+                row.style.transform = 'translateY(10px)';
+                setTimeout(() => {
+                    row.style.opacity = '1';
+                    row.style.transform = 'translateY(0)';
+                    row.style.transition = 'all 0.3s ease';
+                }, index * 50);
+            });
+
+            // Enhanced generate timetable button functionality
+            const generateBtn = document.getElementById('generateBtn');
+            const generateForm = generateBtn.closest('form');
+            
+            generateForm.addEventListener('submit', function(e) {
+                // Add loading state
+                generateBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating...';
+                generateBtn.style.background = '#6c757d';
+                generateBtn.style.cursor = 'not-allowed';
+                generateBtn.disabled = true;
+                
+                // Add loading class to container
+                document.querySelector('.container').classList.add('loading');
+            });
+
+            // Enhanced delete confirmation with better UX
+            const deleteButtons = document.querySelectorAll('.delete-btn');
+            deleteButtons.forEach(button => {
+                button.addEventListener('click', function(e) {
+                    e.preventDefault();
+                    const sessionName = this.closest('tr').querySelector('.subject-badge').textContent;
+                    const staffName = this.closest('tr').querySelector('.staff-info span').textContent;
+                    
+                    const confirmMessage = `🗑️ Delete Lab Session Confirmation\n\n` +
+                        `Subject: ${sessionName}\n` +
+                        `Staff: ${staffName}\n\n` +
+                        `Are you sure you want to permanently delete this lab session?\n\n` +
+                        `⚠️ This action cannot be undone and will remove all associated data.`;
+                    
+                    if (confirm(confirmMessage)) {
+                        // Add loading state to the specific button
+                        this.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Deleting...';
+                        this.style.background = '#6c757d';
+                        this.style.borderColor = '#6c757d';
+                        this.style.pointerEvents = 'none';
+                        
+                        // Add fade out effect to the row
+                        const row = this.closest('tr');
+                        row.style.opacity = '0.5';
+                        row.style.transform = 'scale(0.98)';
+                        
+                        // Simulate network delay for better UX
+                        setTimeout(() => {
+                            window.location.href = this.href;
+                        }, 800);
+                    }
+                });
+            });
+
+            // Add hover effects for action buttons
+            const actionButtons = document.querySelectorAll('.primary-action-btn, .secondary-action-btn, .info-action-btn');
+            actionButtons.forEach(button => {
+                button.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-2px)';
+                });
+                
+                button.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                });
+            });
+
+            // Add success message simulation for generate timetable
+            function showSuccessMessage(message) {
+                const toast = document.createElement('div');
+                toast.style.cssText = `
+                    position: fixed;
+                    top: 20px;
+                    right: 20px;
+                    background: #28a745;
+                    color: white;
+                    padding: 15px 20px;
+                    border-radius: 8px;
+                    box-shadow: 0 4px 15px rgba(40, 167, 69, 0.3);
+                    z-index: 1000;
+                    transform: translateX(400px);
+                    transition: transform 0.3s ease;
+                `;
+                toast.innerHTML = `<i class="fas fa-check-circle"></i> ${message}`;
+                document.body.appendChild(toast);
+                
+                setTimeout(() => {
+                    toast.style.transform = 'translateX(0)';
+                }, 100);
+                
+                setTimeout(() => {
+                    toast.style.transform = 'translateX(400px)';
+                    setTimeout(() => toast.remove(), 300);
+                }, 3000);
+            }
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Add New Semester</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Include jQuery and Select2 -->
+    <link href="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css" rel="stylesheet" />
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            background: linear-gradient(135deg, #8797d7 0%, #805a67 100%);
+            padding: 2rem;
+            color: #1a202c;
+        }
+
+        .form-container {
+            max-width: 600px;
+            margin: auto;
+            background: white;
+            padding: 2rem;
+            border-radius: 15px;
+            box-shadow: 0 0 20px rgba(0,0,0,0.1);
+        }
+
+        h2 {
+            text-align: center;
+            color: #333;
+            margin-bottom: 1.5rem;
+        }
+
+        label {
+            display: block;
+            margin-bottom: 0.5rem;
+            margin-top: 1rem;
+            font-weight: 600;
+        }
+
+        input, select, .select2-container {
+            width: 100%;
+            padding: 0.6rem;
+            font-size: 1rem;
+            border-radius: 8px;
+            border: 1px solid #ccc;
+        }
+
+        button {
+            margin-top: 2rem;
+            width: 100%;
+            background: #667eea;
+            color: white;
+            border: none;
+            padding: 0.75rem;
+            border-radius: 10px;
+            font-size: 1rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: background 0.3s ease;
+        }
+
+        button:hover {
+            background: #5a67d8;
+        }
+
+        .back-link {
+            display: block;
+            text-align: center;
+            margin-top: 1.5rem;
+            color: #4a5568;
+            text-decoration: none;
+            font-size: 0.9rem;
+        }
+
+        .back-link:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="form-container">
+        <h2>Add New Semester</h2>
+        <form method="post" action="/add_semester">
+            <input type="hidden" name="institution_id" value="{{ institution_id }}">
+            <input type="hidden" name="username" value="{{ username }}">
+
+            <label for="specialization_id">Specialization</label>
+            <select name="specialization_id" id="specialization_id" required>
+                {% for spec in specializations %}
+                    <option value="{{ spec.id }}">{{ spec.specialization_name }}</option>
+                {% endfor %}
+            </select>
+
+            <label for="sem">Semester Number</label>
+            <input type="number" name="sem" id="sem" min="1" required>
+
+            <label for="start_date">Start Date</label>
+            <input type="date" name="start_date" id="start_date" required>
+
+            <label for="end_date">End Date</label>
+            <input type="date" name="end_date" id="end_date" required>
+
+            <label for="working_days">Working Days</label>
+            <input type="number" name="working_days" id="working_days" min="1" required>
+
+            <label for="subject_ids">Select Subjects</label>
+            <input type="text" name="subject_inputs">
+
+            <button type="submit">Add Semester</button>
+        </form>
+
+        <a class="back-link" href="/subject_semester?institution_id={{ institution_id }}&username={{ username }}">
+            ← Back to Dashboard
+        </a>
+    </div>
+
+    <script>
+        $(document).ready(function() {
+            $('#subject_ids').select2({
+                placeholder: "Search and select subjects",
+                allowClear: true
+            });
+        });
+    </script>
+</body>
+</html>

@@ -1,0 +1,545 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sections and Room Assignments - {{ institution_name }}</title>
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: linear-gradient(135deg, #8797d7 0%, #805a67 100%);
+            min-height: 100vh;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        /* Header Section */
+        .header {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 3rem 2rem;
+            margin-bottom: 3rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            text-align: center;
+        }
+        .specialization-rect {
+    background: linear-gradient(45deg, #f6ad55, #ed8936); /* orange gradient */
+    color: white;
+    padding: 0.5rem 1.2rem;
+    border-radius: 25px;
+    font-weight: 700;
+    font-size: 1rem;
+    display: inline-block;
+    text-align: center;
+    box-shadow: 0 6px 15px rgba(237, 137, 54, 0.3);
+    margin-bottom: 0.7rem;
+}
+
+        .semester-actions {
+    margin-top: 1rem;
+    text-align: right;
+        }
+
+        .manage-btn {
+            padding: 0.6rem 1.2rem;
+            background: linear-gradient(45deg, #48bb78, #38a169);
+            color: white;
+            font-weight: 600;
+            border: none;
+            border-radius: 8px;
+            text-decoration: none;
+            transition: background 0.3s ease;
+        }
+
+        .manage-btn:hover {
+            background: linear-gradient(45deg, #2f855a, #276749);
+        }
+
+
+        .institution-name {
+            font-size: 2.8rem;
+            font-weight: 800;
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin-bottom: 1rem;
+        }
+
+        .page-title {
+            font-size: 1.8rem;
+            color: #2d3748;
+            font-weight: 600;
+            margin-bottom: 0.5rem;
+        }
+
+        .page-subtitle {
+            font-size: 1.1rem;
+            color: #718096;
+            font-weight: 400;
+        }
+
+        /* Main Content */
+        .content-wrapper {
+            display: flex;
+            flex-direction: column;
+            gap: 2.5rem;
+        }
+
+        .semester-section {
+            background: rgba(255, 255, 255, 0.95);
+            backdrop-filter: blur(15px);
+            border-radius: 25px;
+            padding: 2.5rem;
+            box-shadow: 0 25px 50px rgba(0, 0, 0, 0.1);
+            border: 1px solid rgba(255, 255, 255, 0.2);
+            transition: transform 0.3s ease, box-shadow 0.3s ease;
+        }
+
+        .semester-section:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 30px 60px rgba(0, 0, 0, 0.15);
+        }
+
+        .semester-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 2rem;
+            padding-bottom: 1.5rem;
+            border-bottom: 3px solid #e2e8f0;
+        }
+
+        .semester-title {
+            display: flex;
+            align-items: center;
+            gap: 1.5rem;
+        }
+
+        .semester-number {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 1.4rem;
+            font-weight: 700;
+            box-shadow: 0 8px 20px rgba(102, 126, 234, 0.3);
+        }
+
+        .semester-info {
+            font-size: 1.6rem;
+            font-weight: 700;
+            color: #2d3748;
+        }
+
+        .semester-dates {
+            display: flex;
+            flex-direction: column;
+            gap: 0.5rem;
+        }
+
+        .date-item {
+            display: flex;
+            align-items: center;
+            gap: 0.5rem;
+            font-size: 0.95rem;
+            color: #4a5568;
+        }
+
+        .date-label {
+            font-weight: 600;
+            color: #667eea;
+            min-width: 60px;
+        }
+
+        .date-value {
+            background: rgba(102, 126, 234, 0.1);
+            padding: 0.3rem 0.8rem;
+            border-radius: 15px;
+            font-weight: 500;
+        }
+
+        /* Table Styles */
+        .assignments-table {
+            width: 100%;
+            border-collapse: collapse;
+            margin-top: 1rem;
+            border-radius: 15px;
+            overflow: hidden;
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+        }
+
+        .assignments-table thead {
+            background: linear-gradient(45deg, #667eea, #764ba2);
+            color: white;
+        }
+
+        .assignments-table thead th {
+            padding: 1.5rem 1rem;
+            text-align: left;
+            font-weight: 600;
+            font-size: 1rem;
+            letter-spacing: 0.5px;
+            text-transform: uppercase;
+        }
+
+        .assignments-table tbody tr {
+            background: rgba(247, 250, 252, 0.8);
+            border-bottom: 1px solid rgba(226, 232, 240, 0.5);
+            transition: all 0.3s ease;
+        }
+
+        .assignments-table tbody tr:hover {
+            background: rgba(102, 126, 234, 0.1);
+            transform: translateX(5px);
+        }
+
+        .assignments-table tbody tr:nth-child(even) {
+            background: rgba(255, 255, 255, 0.6);
+        }
+
+        .assignments-table tbody tr:nth-child(even):hover {
+            background: rgba(102, 126, 234, 0.15);
+        }
+
+        .assignments-table tbody td {
+            padding: 1.2rem 1rem;
+            font-size: 0.95rem;
+            color: #2d3748;
+        }
+
+        .section-name {
+            font-weight: 600;
+            color: #667eea;
+            background: rgba(102, 126, 234, 0.1);
+            padding: 0.5rem 1rem;
+            border-radius: 20px;
+            display: inline-block;
+            min-width: 80px;
+            text-align: center;
+        }
+
+        .room-name {
+            font-weight: 600;
+            color: #2d3748;
+        }
+
+        .location {
+            color: #718096;
+            font-style: italic;
+        }
+
+        .capacity {
+            background: linear-gradient(45deg, #38b2ac, #319795);
+            color: white;
+            padding: 0.4rem 0.8rem;
+            border-radius: 15px;
+            font-weight: 600;
+            display: inline-block;
+            min-width: 50px;
+            text-align: center;
+        }
+
+        /* Empty State */
+        .empty-state {
+            text-align: center;
+            padding: 3rem;
+            color: #718096;
+        }
+
+        .empty-state-icon {
+            font-size: 4rem;
+            margin-bottom: 1rem;
+            opacity: 0.5;
+        }
+
+        .empty-state-message {
+            font-size: 1.2rem;
+            font-weight: 500;
+            margin-bottom: 0.5rem;
+        }
+
+        .empty-state-submessage {
+            font-size: 1rem;
+            opacity: 0.8;
+        }
+
+        /* Statistics */
+        .stats-bar {
+            display: flex;
+            gap: 1rem;
+            margin-top: 1.5rem;
+            padding: 1rem;
+            background: rgba(102, 126, 234, 0.1);
+            border-radius: 15px;
+            border-left: 4px solid #667eea;
+        }
+
+        .stat-item {
+            flex: 1;
+            text-align: center;
+        }
+
+        .stat-number {
+            font-size: 1.8rem;
+            font-weight: 700;
+            color: #667eea;
+            display: block;
+        }
+
+        .stat-label {
+            font-size: 0.9rem;
+            color: #718096;
+            margin-top: 0.3rem;
+        }
+
+        /* Responsive Design */
+        @media (max-width: 768px) {
+            .container {
+                padding: 15px;
+            }
+
+            .institution-name {
+                font-size: 2rem;
+            }
+
+            .page-title {
+                font-size: 1.4rem;
+            }
+
+            .semester-header {
+                flex-direction: column;
+                gap: 1rem;
+                text-align: center;
+            }
+
+            .semester-dates {
+                align-items: center;
+            }
+
+            .assignments-table {
+                font-size: 0.85rem;
+            }
+
+            .assignments-table thead th,
+            .assignments-table tbody td {
+                padding: 0.8rem 0.5rem;
+            }
+
+            .stats-bar {
+                flex-direction: column;
+                gap: 0.5rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .assignments-table {
+                display: block;
+                overflow-x: auto;
+                white-space: nowrap;
+            }
+
+            .semester-number {
+                width: 50px;
+                height: 50px;
+                font-size: 1.2rem;
+            }
+        }
+
+        /* Loading Animation */
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid #f3f3f3;
+            border-top: 3px solid #667eea;
+            border-radius: 50%;
+            animation: spin 1s linear infinite;
+        }
+
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
+        }
+        .new-btn-container {
+    position: absolute;
+    top: 30px;
+    right: 40px;
+}
+
+        .new-btn {
+            background: linear-gradient(45deg, #805ad5, #6b46c1);
+            color: white;
+            padding: 0.6rem 1.2rem;
+            border-radius: 10px;
+            font-weight: 600;
+            text-decoration: none;
+            box-shadow: 0 4px 12px rgba(128, 90, 213, 0.4);
+            transition: background 0.3s ease;
+        }
+
+        .new-btn:hover {
+            background: linear-gradient(45deg, #6b46c1, #553c9a);
+        }
+        .new-btn-container {
+  display: flex;
+  justify-content: flex-end;
+  margin: 20px 0;
+}
+
+.new-btn-container a {
+  padding: 10px 20px;
+  background-color: #2d89ef;
+  color: white;
+  text-decoration: none;
+  border-radius: 8px;
+  margin-top: 120px;  
+  font-weight: bold;
+  box-shadow: 0 2px 5px rgba(0, 0, 0, 0.2);
+  transition: background-color 0.3s ease;
+}
+
+.new-btn-container a:hover {
+  background-color: #1b5fbd;
+}
+  .navigation-buttons .nav-btn:hover {
+    opacity: 0.85;
+    transition: 0.2s;
+  }
+
+
+    </style>
+</head>
+<body>
+  <div class="container">
+    <!-- Header -->
+    <div class="header">
+  <div class="institution-name">{{ institution_name }}</div>
+  <div class="page-title">Sections and Room Assignments</div>
+  <div class="page-subtitle">Academic Year Management System</div>
+</div>
+
+<!-- Add New Button (well-placed and styled) -->
+<div class="new-btn-container">
+  <a href="/add_section_room?institution_id={{ institution_id }}&username={{ username }}">➕ Add New Assignment</a>
+</div>
+
+
+    <!-- Main Content -->
+    <div class="content-wrapper">
+      {% if data %}
+        {% for entry in data %}
+        <div class="semester-section">
+          <div class="semester-header">
+            <div class="semester-actions">
+              <a href="/manage_sections?semester_id={{ entry.semester.id }}&institution_id={{ institution_id }}&username={{ username }}"
+                 class="manage-btn">Manage</a>
+            </div>
+
+            <div class="semester-title">
+              <div class="semester-number">{{ entry.semester.sem }}</div>
+              <div class="semester-info">Semester {{ entry.semester.sem }}</div>
+            </div>
+
+            <div class="semester-dates">
+              {% if entry.sections %}
+                <div class="specialization-rect">
+                    {{ entry.sections[0].specialization_name }}
+                </div>
+                {% endif %}
+
+            </div>
+          </div>
+
+          {% if entry.sections %}
+          <table class="assignments-table">
+            <thead>
+              <tr>
+                <th>Section</th>
+                <th>Room Name</th>
+                <th>Location</th>
+                <th>Capacity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {% for sec in entry.sections %}
+              <tr>
+                <td><span class="section-name">{{ sec.section_name }}</span></td>
+                <td><span class="room-name">{{ sec.room_name }}</span></td>
+                <td><span class="location">{{ sec.location }}</span></td>
+                <td><span class="capacity">{{ sec.capacity }}</span></td>
+              </tr>
+              {% endfor %}
+            </tbody>
+          </table>
+
+          <!-- Statistics -->
+          <div class="stats-bar">
+            <div class="stat-item">
+              <span class="stat-number">{{ entry.sections|length }}</span>
+              <span class="stat-label">Total Sections</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">{{ entry.sections|map(attribute='capacity')|sum }}</span>
+              <span class="stat-label">Total Capacity</span>
+            </div>
+            <div class="stat-item">
+              <span class="stat-number">{{ (entry.sections|map(attribute='capacity')|sum / entry.sections|length)|round(1) }}</span>
+              <span class="stat-label">Avg. Capacity</span>
+            </div>
+          </div>
+          {% else %}
+          <div class="empty-state">
+            <div class="empty-state-icon">🏫</div>
+            <div class="empty-state-message">No Section-Room Assignments Found</div>
+            <div class="empty-state-submessage">No assignments have been configured for this semester yet.</div>
+          </div>
+          {% endif %}
+        </div>
+        {% endfor %}
+      {% else %}
+        <div class="semester-section">
+          <div class="empty-state">
+            <div class="empty-state-icon">📚</div>
+            <div class="empty-state-message">No Semesters Found</div>
+            <div class="empty-state-submessage">No semesters or sections have been configured for this institution.</div>
+          </div>
+        </div>
+        <!-- Navigation Buttons -->
+
+      {% endif %}
+      <div class="navigation-buttons" style="display: flex; justify-content: space-between; padding: 20px 0;">
+  <a href="/subject_semester?institution_id={{ institution_id }}&username={{ username }}"
+     class="nav-btn"
+     style="padding: 10px 20px; background-color: #f0f0f0; border-radius: 5px; text-decoration: none; color: #333;">
+    ⬅ Previous
+  </a>
+
+  <a href="/staff_details?institution_id={{ institution_id }}&username={{ username }}"
+     class="nav-btn"
+     style="padding: 10px 20px; background-color: #4CAF50; border-radius: 5px; text-decoration: none; color: white;">
+    Next ➡
+  </a>
+</div>
+    </div>
+  </div>
+</body>
+</html>
