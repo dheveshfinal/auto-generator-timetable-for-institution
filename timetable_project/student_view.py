@@ -33,6 +33,7 @@ time_table = Table("time_table", time_table_meta, autoload_with=engine)
 
 router = APIRouter()
 templates = Jinja2Templates(directory="templates")
+templates.env.globals.update(zip=zip)
 
 @router.get("/student-view")
 def student_view(
@@ -149,6 +150,13 @@ def student_view(
         half_day_pattern = configurations.get("half_day_pattern", "")
         half_day_start = configurations.get("half_day_start_time", "09:00:00")
         half_day_end = configurations.get("half_day_end_time", "13:00:00")
+        # Get lunch break time (with defaults)
+        lunch_start = configurations.get("lunch_start_time", "12:00:00")
+        lunch_end = configurations.get("lunch_end_time", "13:00:00")
+
+        lunch_start_time = datetime.strptime(lunch_start, "%H:%M:%S")
+        lunch_end_time = datetime.strptime(lunch_end, "%H:%M:%S")
+
 
         # Construct time slots per day
         day_time_slot_map = {}
@@ -163,9 +171,17 @@ def student_view(
             current = start
             slots = []
             while current < end:
-                slot_str = current.strftime("%H:%M") + " - " + (current + timedelta(hours=1)).strftime("%H:%M")
-                slots.append(slot_str)
-                current += timedelta(hours=1)
+                next_slot = current + timedelta(hours=1)
+
+                if current == lunch_start_time:
+                    # Add lunch break label
+                    slots.append(f"{current.strftime('%H:%M')}-{next_slot.strftime('%H:%M')} (Lunch Break)")
+                    current = lunch_end_time  # Skip to end of lunch
+                    continue
+
+                slots.append(f"{current.strftime('%H:%M')}-{next_slot.strftime('%H:%M')}")
+                current = next_slot
+
             day_time_slot_map[day] = slots
 
         # Assign subjects randomly to time slots per section per day
@@ -210,6 +226,7 @@ def student_view(
         # Render template
         return templates.TemplateResponse("student_view.html", {
             "request": request,
+            
             "header_info": header_result,
             "institution_id":inst_final_name ,
             "program_id": program_id,
@@ -221,6 +238,8 @@ def student_view(
             "section_subject_map": section_subject_map,
             "section_room_map": section_room_map,
             "staff_data": staff_final_data,
+            "lunch_start": lunch_start,
+            "lunch_end": lunch_end,
             "inst_final_name":inst_final_name
         })
 
