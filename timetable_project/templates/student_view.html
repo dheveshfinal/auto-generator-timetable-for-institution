@@ -325,9 +325,14 @@ tbody tr:hover td:not(:first-child):not(:empty) {
                     {% for day, subjects in schedule.items() %}
                         <tr>
                             <td>{{ day }}</td>
-                            {% for subject in subjects %}
-                                <td>{{ subject }}</td>
-                            {% endfor %}
+                            {% for slot, subject in zip(day_time_slot_map[day], subjects) %}
+    {% if 'Lunch' in slot %}
+        <td><strong>Lunch Break</strong></td>
+    {% else %}
+        <td>{{ subject }}</td>
+    {% endif %}
+{% endfor %}
+
                         </tr>
                     {% endfor %}
                 </tbody>
